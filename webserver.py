@@ -40,7 +40,6 @@ class webserverHandler(BaseHTTPRequestHandler):
 				output += "<form method='POST' enctype='multipart/form-data' action='/hello'><h2>What would you like me to say?</h2><input name='message' type='text'><input type='submit' value='Submit'></form>"
                                 output += "</body></html>"
 				self.wfile.write(output)
-                                #print output
                                 return
 			if self.path.endswith("/restaurants"):
 				rests = session.query(Restaurant).all()
@@ -58,7 +57,6 @@ class webserverHandler(BaseHTTPRequestHandler):
 					output += '<a href="/restaurants/%s/delete">Delete</a></br></br>' % rest.id
 				output += "</body></html>"
 				self.wfile.write(output)
-				#print output
 				return
 			if self.path.endswith("/restaurants/new"):
 				self.send_response(200)
@@ -117,8 +115,6 @@ class webserverHandler(BaseHTTPRequestHandler):
 				newrest= Restaurant(name = restname[0])
 				session.add(newrest)
 				session.commit()
-				print "Whoops! Rests"	
-                                #print output
 				self.send_response(301)
 				self.send_header('Content-type', 'text/html')
 				self.send_header('Location', '/restaurants')
@@ -134,14 +130,12 @@ class webserverHandler(BaseHTTPRequestHandler):
                                 restid = paths[2]
 				
 				rest= session.query(Restaurant).get(restid)
-                                #UPDATE rest with new name!!!!!
 				if rest != []:		
 					print rest.name	
 					newrestname=  restname[0]
 					rest.name = newrestname
 					session.commit()
 
-                                	#print output
                                 	self.send_response(301)
                                 	self.send_header('Content-type', 'text/html')
                                 	self.send_header('Location', '/restaurants')
@@ -151,7 +145,6 @@ class webserverHandler(BaseHTTPRequestHandler):
 				paths = self.path.split('/')
                                 restid = paths[2]
 				rest= session.query(Restaurant).get(restid)
-                                #UPDATE rest with new name!!!!!
                                 if rest != []:
 					session.delete(rest)
 					session.commit()
@@ -160,24 +153,7 @@ class webserverHandler(BaseHTTPRequestHandler):
                                 self.send_header('Location', '/restaurants')
                                 self.end_headers()
 			return
-			#self.send_response(301)
-			#self.end_headers()
 
-			#ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
-			#if ctype == 'multipart/form-data':
-			#	fields=cgi.parse_multipart(self.rfile, pdict)
-			#messagecontent = fields.get('message')
-
-			#output = ""
-			#output += "<html><body>"
-			#output += "<h2> Okay, how about this: </h2>"
-			#output += "</h1> %s </h1>" % messagecontent[0]
-
-			#output += "<form method='POST' enctype='multipart/form-data' action='/hello'><h2>What would you like me to say?</h2><input name='message' type='text'><input type='submit' value='Submit'></form>"
-			#output += "</body></html>"
-			#self.wfile.write(output)
-			#print output
-			
 		except:
 			pass
 
